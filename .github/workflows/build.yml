@@ -1,0 +1,25 @@
+name: build-deploy
+
+on:
+  push:
+    branches:
+      - master  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: registry.tekit.io/tekit-io
+          username: ${{ secrets.TEKIT_REGISTRY_USERNAME }}
+          password: ${{ secrets.TEKIT_REGISTRY_PASSWORD }}
+          registry: registry.tekit.io
+          context: .
+          tags: latest
